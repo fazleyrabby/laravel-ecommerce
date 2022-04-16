@@ -1,4 +1,4 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 @section('content')
 <div class="container">
@@ -70,10 +70,9 @@
         </div>
     </div>
 </div>
-@endsection
+@endsection --}}
 
-
-{{-- <!DOCTYPE html>
+<!DOCTYPE html>
 <html lang="en">
 <head>
   <!-- Required meta tags -->
@@ -104,7 +103,7 @@
               <h4>Hello! let's get started</h4>
               <h6 class="font-weight-light">Sign in to continue.</h6>
               <form class="pt-3" method="POST" action="{{ route('login') }}">
-                  
+                @csrf
                 <div class="form-group">
                     <input id="email" type="email" class="form-control @error('email') is-invalid @enderror" name="email" value="{{ old('email') }}" required autocomplete="email" autofocus>
 
@@ -170,4 +169,4 @@
   <!-- endinject -->
 </body>
 
-</html> --}}
+</html> 

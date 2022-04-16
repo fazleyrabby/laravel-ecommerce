@@ -30,7 +30,6 @@ class LoginController extends Controller
 
     public function redirectTo()
     {
-
         if(Auth::check() && in_array(Auth::user()->role_id, [1,2,3]) ) {
             return $this->redirectTo = route('admin.dashboard');
         } elseif(Auth::check()) {
