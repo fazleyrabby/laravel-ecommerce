@@ -24,6 +24,9 @@ Route::get('/', function () {
 
 require __DIR__.'/auth.php';
 
+Route::get('test', [AdminController::class,'test']);
+
+Route::match(['get','post'],'admin/login', [AdminController::class, 'login']);
 
 //Admin Routes
 Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], function () {
