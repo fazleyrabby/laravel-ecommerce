@@ -26,6 +26,10 @@ class AdminController extends Controller
         // dd(Auth::user()->getRoleNames());
     }
 
+    public function settings(){
+        return view('admin.setting.edit');
+    }
+
     
     public function logout(Request $request) {
         Auth::logout();
