@@ -19,27 +19,28 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        
-        $superadminRole = Role::create(['name' => 'superadmin']);
-        Permission::create(['name' => 'all']);
+        $permissions =  [
+            ['name' => 'create vendor'],
+            ['name' => 'edit vendor'],
+            ['name' => 'delete vendor'],
+            ['name' => 'create user'],
+            ['name' => 'edit user'],
+            ['name' => 'delete user']
+        ];
 
         $adminRole = Role::create(['name' => 'admin']);
-        Role::create(['name' => 'subadmin']);
-        Role::create(['name' => 'vendor']);
+
+        $vendorRole = Role::create(['name' => 'vendor']);
+
         $userRole = Role::create(['name' => 'user']);
-        
+
+        foreach ($permissions as $permission) {
+            $per= Permission::create($permission);
+            $adminRole->givePermissionTo($per);
+        }
+
         $user = User::create([
     		'role_id' => 1,
-    		'name' => 'Super Admin',
-    		'email' => 'superadmin@admin.com',
-    		'password' => Hash::make('admin'),
-		]);
-
-        $user->assignRole($superadminRole);
-
-       
-        $user = User::create([
-    		'role_id' => 2,
     		'name' => 'Admin',
     		'email' => 'admin@admin.com',
     		'password' => Hash::make('admin'),
@@ -47,14 +48,24 @@ class DatabaseSeeder extends Seeder
 
         $user->assignRole($adminRole);
 
-      
         $user = User::create([
-    		'role_id' => 4,
+    		'role_id' => 2,
     		'name' => 'Vendor',
     		'email' => 'vendor@mail.com',
     		'password' => Hash::make('vendor'),
 		]);
 
+        $user->assignRole($vendorRole);
+
+        $user = User::create([
+    		'role_id' => 3,
+    		'name' => 'User',
+    		'email' => 'user@mail.com',
+    		'password' => Hash::make('user'),
+		]);
+
         $user->assignRole($userRole);
+      
+        
     }
 }
