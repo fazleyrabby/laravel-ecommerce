@@ -3,11 +3,13 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Models\User;
+use App\Models\Usermeta;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
+use Intervention\Image\Facades\Image;
 use Illuminate\Support\Facades\Session;
 
 
@@ -32,18 +34,56 @@ class AdminController extends Controller
 
     public function settings(Request $request)
     {
-        if($request->isMethod('post')){
-            $this->validate($request, [
-                'name' => 'required|unique:users,name,' . Auth::id(),
+        if ($request->isMethod('post')) {
+            $validated = $this->validate($request, [
+                'name' => 'required|regex:/^[\pL\s\-]+$/u|unique:users,name,' . Auth::id(),
                 'email' => 'required|email|unique:users,email,' . Auth::id(),
             ]);
 
-           $user = User::find(Auth::id());
-           $user->update($request->except('_token'));
-           return redirect()->back()->with('success', 'User data updated!');
+            $user = User::find(Auth::id());
+            $user->update($validated);
+
+            $meta = Usermeta::firstOrNew(['user_id' => Auth::id()]);
+
+            $existingPhoto = isset($meta->value) ? json_decode($meta->value)->photo : '';
+            // upload photo 
+            if ($request->hasFile('photo')) {
+                $photo  = $request->file('photo');
+                if ($photo->isValid()) {
+                    $photo_name = hexdec(uniqid()) . '.' . $photo->getClientOriginalExtension();
+                    $photo_path = 'admin/images/uploads/' . $photo_name;
+
+                    // if file exists than delete 
+                    if (file_exists($existingPhoto)) {
+                        unlink($existingPhoto);
+                    }
+                    
+                    //Upload new photo
+                    Image::make($photo)->save($photo_path);
+                    $profile_photo = $photo_path;
+                }
+            }
+
+            $data = [
+                'contact' => $request->contact,
+                'photo' => $profile_photo ? $profile_photo : $existingPhoto,
+            ];
+
+            $meta->key = 'user_data';
+            $meta->value = json_encode($data);
+            $meta->status = 1;
+            $meta->save();
+
+            return redirect()->back()->with('success', 'User data updated!');
         }
 
-        return view('admin.setting.edit');
+        $data = '';
+        $meta = Auth::user()->meta;
+        if ($meta) {
+            $data = json_decode($meta->value);
+        }
+
+        return view('admin.setting.edit', compact('data'));
     }
 
     public function updatePassword(Request $request)
@@ -62,13 +102,13 @@ class AdminController extends Controller
             return redirect()->back()->with('success', 'Password Successfully Updated!!');
         }
 
-        return redirect()->back()->with('old_password', 'Old Password is not correct!');
+        return redirect()->back()->with('old_password', 'Old Password is not correct!')->withInput();
     }
 
 
-    public function logout(Request $request)
+    public function photout(Request $request)
     {
-        Auth::logout();
+        Auth::photout();
         Session::flush();
         return redirect('/admin/login');
     }
