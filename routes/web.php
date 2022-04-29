@@ -32,7 +32,8 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], fu
     Route::match(['get','post'],'login', [AdminController::class, 'login'])->name('login');
     Route::get('logout', [AdminController::class, 'logout'])->name('logout');
 
-    Route::get('settings', [AdminController::class, 'settings'])->name('settings');
+    Route::match(['get','post'],'settings', [AdminController::class, 'settings'])->name('settings');
+    Route::post('password', [AdminController::class, 'updatePassword'])->name('update.password');
 
     Route::group(['middleware' => 'admin'], function(){
         Route::get('dashboard', [AdminController::class, 'dashboard'])->name('dashboard');
