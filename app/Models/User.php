@@ -48,4 +48,9 @@ class User extends Authenticatable
     {
         return $this->hasOne(Usermeta::class)->where('key', 'user_data');
     }
+
+    public function vendor() 
+    {
+        return $this->hasOne(Usermeta::class)->where('key', 'vendor_data');
+    }
 }

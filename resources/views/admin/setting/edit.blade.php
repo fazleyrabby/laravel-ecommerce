@@ -62,6 +62,35 @@
                                     </span>
                                 @enderror
                             </div>
+
+                            @if (Auth::user()->role_id == 2)
+                            <h4 class="mb-3">Vendor Details</h4>
+                            <div class="form-group">
+                                <label for="city">City</label>
+                                <input type="text" name="city" class="form-control @error('city') is-invalid @enderror"
+                                    id="city" placeholder="City" value="@if(isset($data->city)) {{ $data->city }} @endif"
+                                    required>
+                                @error('city')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+
+                            <div class="form-group">
+                                <label for="address">Address</label>
+                                <input type="text" name="address" class="form-control @error('address') is-invalid @enderror"
+                                    id="address" placeholder="Address" value="@if(isset($data->address)) {{ $data->address }} @endif"
+                                    required>
+                                @error('address')
+                                    <span class="invalid-feedback d-block" role="alert">
+                                        <strong>{{ $message }}</strong>
+                                    </span>
+                                @enderror
+                            </div>
+                            @endif
+
+
                             
                             <button type="submit" class="btn btn-primary mr-2">Update</button>
                         </form>

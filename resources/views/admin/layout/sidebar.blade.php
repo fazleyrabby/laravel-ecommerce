@@ -7,6 +7,15 @@
         </a>
       </li>
 
+      @if(Auth::user()->role_id == 2)
+      <li class="nav-item">
+        <a class="nav-link" href="{{ route('admin.vendor') }}">
+          <i class="icon-grid menu-icon"></i>
+          <span class="menu-title">Vendor Business Info.</span>
+        </a>
+      </li>
+      @endif
+
       
       {{-- <li class="nav-item">
         <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">

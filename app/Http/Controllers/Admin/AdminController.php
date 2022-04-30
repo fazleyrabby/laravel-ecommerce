@@ -5,7 +5,6 @@ namespace App\Http\Controllers\Admin;
 use App\Models\User;
 use App\Models\Usermeta;
 use Illuminate\Http\Request;
-use Spatie\Permission\Models\Role;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
@@ -32,49 +31,63 @@ class AdminController extends Controller
         // dd(Auth::user()->getRoleNames());
     }
 
+    public function save_settings($request){
+        $validated = $this->validate($request, [
+            'name' => 'required|regex:/^[\pL\s\-]+$/u|unique:users,name,' . Auth::id(),
+            'email' => 'required|email|unique:users,email,' . Auth::id(),
+        ]);
+
+        $user = User::find(Auth::id());
+        $user->update($validated);
+
+        $meta = Usermeta::where([['user_id' , Auth::id()],['key', 'user_data']])->first() ?? new Usermeta();
+
+        //check existing photo
+        $existingPhoto = isset($meta->value) ? (isset(json_decode($meta->value)->photo) ? json_decode($meta->value)->photo : '') : '';
+
+        // upload photo 
+        $profile_photo = $existingPhoto;
+
+        if ($request->hasFile('photo')) {
+            $photo  = $request->file('photo');
+            if ($photo->isValid()) {
+                $photo_name = hexdec(uniqid()) . '.' . $photo->getClientOriginalExtension();
+                $photo_path = 'admin/images/uploads/' . $photo_name;
+
+                // if file exists than delete 
+                if (file_exists($existingPhoto)) {
+                    unlink($existingPhoto);
+                }
+                
+                //Upload new photo
+                Image::make($photo)->save($photo_path);
+                $profile_photo = $photo_path;
+            }
+        }
+
+        $data = [
+            'contact' => $request->contact,
+            'photo' => $profile_photo ?? '',
+        ];
+
+        //Vendor Specific data
+        if($request->city) $data['city'] = $request->city;
+        if($request->address) $data['address'] = $request->address;
+        
+        $meta->key = 'user_data';
+        $meta->user_id = $user->id;
+        $meta->value = json_encode($data);
+        $meta->status = 1;
+        $meta->save();
+
+        return redirect()->back()->with('success', 'User data updated!');
+    }
+
+
     public function settings(Request $request)
     {
         if ($request->isMethod('post')) {
-            $validated = $this->validate($request, [
-                'name' => 'required|regex:/^[\pL\s\-]+$/u|unique:users,name,' . Auth::id(),
-                'email' => 'required|email|unique:users,email,' . Auth::id(),
-            ]);
-
-            $user = User::find(Auth::id());
-            $user->update($validated);
-
-            $meta = Usermeta::firstOrNew(['user_id' => Auth::id()]);
-
-            $existingPhoto = isset($meta->value) ? json_decode($meta->value)->photo : '';
-            // upload photo 
-            if ($request->hasFile('photo')) {
-                $photo  = $request->file('photo');
-                if ($photo->isValid()) {
-                    $photo_name = hexdec(uniqid()) . '.' . $photo->getClientOriginalExtension();
-                    $photo_path = 'admin/images/uploads/' . $photo_name;
-
-                    // if file exists than delete 
-                    if (file_exists($existingPhoto)) {
-                        unlink($existingPhoto);
-                    }
-                    
-                    //Upload new photo
-                    Image::make($photo)->save($photo_path);
-                    $profile_photo = $photo_path;
-                }
-            }
-
-            $data = [
-                'contact' => $request->contact,
-                'photo' => $profile_photo ? $profile_photo : $existingPhoto,
-            ];
-
-            $meta->key = 'user_data';
-            $meta->value = json_encode($data);
-            $meta->status = 1;
-            $meta->save();
-
-            return redirect()->back()->with('success', 'User data updated!');
+            $this->save_settings($request);
         }
 
         $data = '';
@@ -106,9 +119,9 @@ class AdminController extends Controller
     }
 
 
-    public function photout(Request $request)
+    public function logout(Request $request)
     {
-        Auth::photout();
+        Auth::logout();
         Session::flush();
         return redirect('/admin/login');
     }
