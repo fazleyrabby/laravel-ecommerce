@@ -9,8 +9,7 @@ use Illuminate\Support\Facades\Auth;
 
 class VendorController extends Controller
 {
-    public function save_details($request){
-
+    public function update(Request $request){
         $vendor_data = Usermeta::where([['user_id', Auth::id()],['key', 'vendor_data']])->first() ?? new Usermeta();
        
         $data = [
@@ -38,11 +37,7 @@ class VendorController extends Controller
         return redirect()->back()->with('success', 'Vendor data updated!');
     }
 
-    public function vendor(Request $request){
-        if ($request->isMethod('post')) {
-            $this->save_details($request);
-        }
-
+    public function edit(){
         $data = '';
         $vendor = Auth::user()->vendor;
         if ($vendor) {

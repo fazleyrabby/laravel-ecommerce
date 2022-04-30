@@ -99,6 +99,7 @@
       setTimeout(() => {
         if($('.alert')){
           $('.alert').alert('close')
+          $('.alert').alert('dispose')
         }
       }, 2500);
     </script>

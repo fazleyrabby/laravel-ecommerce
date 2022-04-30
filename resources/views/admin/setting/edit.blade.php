@@ -16,7 +16,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">User Settings</h4>
-                        <form class="forms-sample" action="{{ route('admin.settings') }}" method="post" enctype="multipart/form-data">
+                        <form class="forms-sample" action="{{ route('admin.settings.update') }}" method="post" enctype="multipart/form-data">
                             @csrf
                             <div class="form-group">
                                 <label for="photo">Profile Photo</label>

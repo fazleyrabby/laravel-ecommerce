@@ -16,7 +16,7 @@
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">Vendor Business Details</h4>
-                        <form class="forms-sample" action="{{ route('admin.vendor') }}" method="post" enctype="multipart/form-data">
+                        <form class="forms-sample" action="{{ route('admin.vendor.update') }}" method="post" enctype="multipart/form-data">
                             @csrf
 
                             <div class="row">

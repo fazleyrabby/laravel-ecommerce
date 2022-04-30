@@ -31,7 +31,7 @@ class AdminController extends Controller
         // dd(Auth::user()->getRoleNames());
     }
 
-    public function save_settings($request){
+    public function update(Request $request){
         $validated = $this->validate($request, [
             'name' => 'required|regex:/^[\pL\s\-]+$/u|unique:users,name,' . Auth::id(),
             'email' => 'required|email|unique:users,email,' . Auth::id(),
@@ -84,12 +84,8 @@ class AdminController extends Controller
     }
 
 
-    public function settings(Request $request)
+    public function edit()
     {
-        if ($request->isMethod('post')) {
-            $this->save_settings($request);
-        }
-
         $data = '';
         $meta = Auth::user()->meta;
         if ($meta) {
