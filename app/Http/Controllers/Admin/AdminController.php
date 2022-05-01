@@ -71,13 +71,14 @@ class AdminController extends Controller
         ];
 
         //Vendor Specific data
+        if($request->country) $data['country'] = $request->country;
         if($request->city) $data['city'] = $request->city;
+        if($request->state) $data['state'] = $request->state;
         if($request->address) $data['address'] = $request->address;
         
         $meta->key = 'user_data';
         $meta->user_id = $user->id;
         $meta->value = json_encode($data);
-        $meta->status = 1;
         $meta->save();
 
         return redirect()->back()->with('success', 'User data updated!');

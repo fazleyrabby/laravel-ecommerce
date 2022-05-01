@@ -6,11 +6,35 @@ use App\Models\Usermeta;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
 
 class VendorController extends Controller
 {
     public function update(Request $request){
         $vendor_data = Usermeta::where([['user_id', Auth::id()],['key', 'vendor_data']])->first() ?? new Usermeta();
+
+        //check existing photo
+       $existingPhoto = isset($vendor_data->value) ? (isset(json_decode($vendor_data->value)->nid_photo) ? json_decode($vendor_data->value)->nid_photo : '') : '';
+
+        // upload photo 
+        $nid_photo = $existingPhoto;
+
+        if ($request->hasFile('nid_photo')) {
+            $photo  = $request->file('nid_photo');
+            if ($photo->isValid()) {
+                $photo_name = hexdec(uniqid()) . '.' . $photo->getClientOriginalExtension();
+                $photo_path = 'admin/images/uploads/nid_' . $photo_name;
+
+                // if file exists than delete 
+                if (file_exists($existingPhoto)) {
+                    unlink($existingPhoto);
+                }
+                
+                //Upload new photo
+                Image::make($photo)->save($photo_path);
+                $nid_photo = $photo_path;
+            }
+        }
        
         $data = [
             'shop_name' => $request->shop_name,
@@ -25,13 +49,14 @@ class VendorController extends Controller
             // 'address_proof' => $request->address_proof,
             // 'address_proof_image' => $request->address_proof_image,
             'license_number' => $request->license_number,
+            'nid_number' => $request->nid_number,
             // 'gst_number' => $request->gst_number,
             // 'pan_number' => $request->pan_number,
+            'nid_photo' => $nid_photo ?? '',
         ];
         
         $vendor_data->key = 'vendor_data';
         $vendor_data->value = json_encode($data);
-        $vendor_data->status = 1;
         $vendor_data->save();
 
         return redirect()->back()->with('success', 'Vendor data updated!');

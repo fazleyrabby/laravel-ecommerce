@@ -21,7 +21,7 @@ return new class extends Migration
             $table->string('key');
             $table->text('value'); // address,city,state,country,pincode,mobile
 
-            $table->tinyInteger('status'); 
+            // $table->tinyInteger('status'); 
             $table->timestamps(); 
             
         });

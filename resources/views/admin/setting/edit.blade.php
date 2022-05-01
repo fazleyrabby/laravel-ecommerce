@@ -12,82 +12,136 @@
             </div>
         @endif
         <div class="row">
-            <div class="col-md-6 grid-margin stretch-card">
+            <div class="col-md-12 grid-margin stretch-card">
                 <div class="card">
                     <div class="card-body">
                         <h4 class="card-title">User Settings</h4>
                         <form class="forms-sample" action="{{ route('admin.settings.update') }}" method="post" enctype="multipart/form-data">
                             @csrf
-                            <div class="form-group">
-                                <label for="photo">Profile Photo</label>
-                                <input type="file" name="photo" class="form-control mb-2">
+                            <div class="mb-3">
                                 @if(isset($data->photo)) <img width="150" alt="{{ basename($data->photo) }}" title="{{ basename($data->photo) }}" src="{{ asset($data->photo) }}"/> @endif
-                                
-                                @error('photo')
-                                    <span class="invalid-feedback d-block" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputUsername1">Name</label>
-                                <input type="text" name="name" value="{{ Auth::user()->name }}"
-                                    class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Name"
-                                    required>
-                                @error('name')
-                                    <span class="invalid-feedback d-block" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="photo">Profile Photo</label>
+                                        <input type="file" name="photo" class="form-control mb-2">
+                                        @error('photo')
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputUsername1">Name</label>
+                                        <input type="text" name="name" value="{{ Auth::user()->name }}"
+                                            class="form-control @error('name') is-invalid @enderror" id="name" placeholder="Name"
+                                            required>
+                                        @error('name')
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="exampleInputEmail1">Email address</label>
-                                <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
-                                    id="exampleInputEmail1" placeholder="Email" value="{{ Auth::user()->email }}"
-                                    required>
-                                @error('email')
-                                    <span class="invalid-feedback d-block" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="exampleInputEmail1">Email address</label>
+                                        <input type="email" name="email" class="form-control @error('email') is-invalid @enderror"
+                                            id="exampleInputEmail1" placeholder="Email" value="{{ Auth::user()->email }}"
+                                            required>
+                                        @error('email')
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="contact">Contact</label>
+                                        <input type="text" name="contact" class="form-control @error('contact') is-invalid @enderror"
+                                            id="contact" placeholder="Contact" value="@if(isset($data->contact)) {{ $data->contact }} @endif"
+                                            required>
+                                        @error('contact')
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
-                            <div class="form-group">
-                                <label for="contact">Contact</label>
-                                <input type="text" name="contact" class="form-control @error('contact') is-invalid @enderror"
-                                    id="contact" placeholder="Contact" value="@if(isset($data->contact)) {{ $data->contact }} @endif"
-                                    required>
-                                @error('contact')
-                                    <span class="invalid-feedback d-block" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                            
+                            
+                            
+                            
 
                             @if (Auth::user()->role_id == 2)
                             <h4 class="mb-3">Vendor Details</h4>
-                            <div class="form-group">
-                                <label for="city">City</label>
-                                <input type="text" name="city" class="form-control @error('city') is-invalid @enderror"
-                                    id="city" placeholder="City" value="@if(isset($data->city)) {{ $data->city }} @endif"
-                                    required>
-                                @error('city')
-                                    <span class="invalid-feedback d-block" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
+
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="country">Country</label>
+                                        <input type="text" name="country" class="form-control @error('country') is-invalid @enderror"
+                                            id="country" placeholder="Country" value="@if(isset($data->country)) {{ $data->country }} @endif"
+                                            required>
+                                        @error('country')
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="city">City</label>
+                                        <input type="text" name="city" class="form-control @error('city') is-invalid @enderror"
+                                            id="city" placeholder="City" value="@if(isset($data->city)) {{ $data->city }} @endif"
+                                            required>
+                                        @error('city')
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
                             </div>
 
-                            <div class="form-group">
-                                <label for="address">Address</label>
-                                <input type="text" name="address" class="form-control @error('address') is-invalid @enderror"
-                                    id="address" placeholder="Address" value="@if(isset($data->address)) {{ $data->address }} @endif"
-                                    required>
-                                @error('address')
-                                    <span class="invalid-feedback d-block" role="alert">
-                                        <strong>{{ $message }}</strong>
-                                    </span>
-                                @enderror
-                            </div>
+                            <div class="row">
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="sate">State</label>
+                                        <input type="text" name="state" class="form-control @error('state') is-invalid @enderror"
+                                            id="state" placeholder="State" value="@if(isset($data->state)) {{ $data->state }} @endif"
+                                            required>
+                                        @error('state')
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                                <div class="col-md-6">
+                                    <div class="form-group">
+                                        <label for="address">Address</label>
+                                        <input type="text" name="address" class="form-control @error('address') is-invalid @enderror"
+                                            id="address" placeholder="Address" value="@if(isset($data->address)) {{ $data->address }} @endif"
+                                            required>
+                                        @error('address')
+                                            <span class="invalid-feedback d-block" role="alert">
+                                                <strong>{{ $message }}</strong>
+                                            </span>
+                                        @enderror
+                                    </div>
+                                </div>
+                            </div>       
                             @endif
 
 
