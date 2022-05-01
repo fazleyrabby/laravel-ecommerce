@@ -20,22 +20,9 @@ class VendorController extends Controller
         $nid_photo = $existingPhoto;
 
         if ($request->hasFile('nid_photo')) {
-            $photo  = $request->file('nid_photo');
-            if ($photo->isValid()) {
-                $photo_name = hexdec(uniqid()) . '.' . $photo->getClientOriginalExtension();
-                $photo_path = 'admin/images/uploads/nid_' . $photo_name;
-
-                // if file exists than delete 
-                if (file_exists($existingPhoto)) {
-                    unlink($existingPhoto);
-                }
-                
-                //Upload new photo
-                Image::make($photo)->save($photo_path);
-                $nid_photo = $photo_path;
-            }
+            $nid_photo = imageUpload($request->file('nid_photo'), $existingPhoto, 'nid_');
         }
-       
+        
         $data = [
             'shop_name' => $request->shop_name,
             'shop_address' => $request->shop_address,

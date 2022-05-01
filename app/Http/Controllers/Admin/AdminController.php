@@ -48,21 +48,9 @@ class AdminController extends Controller
         // upload photo 
         $profile_photo = $existingPhoto;
 
-        if ($request->hasFile('photo')) {
-            $photo  = $request->file('photo');
-            if ($photo->isValid()) {
-                $photo_name = hexdec(uniqid()) . '.' . $photo->getClientOriginalExtension();
-                $photo_path = 'admin/images/uploads/' . $photo_name;
 
-                // if file exists than delete 
-                if (file_exists($existingPhoto)) {
-                    unlink($existingPhoto);
-                }
-                
-                //Upload new photo
-                Image::make($photo)->save($photo_path);
-                $profile_photo = $photo_path;
-            }
+        if ($request->hasFile('photo')) {
+            $profile_photo = imageUpload($request->file('photo'), $existingPhoto);
         }
 
         $data = [
