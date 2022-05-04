@@ -11,10 +11,10 @@ use Intervention\Image\Facades\Image;
 class VendorController extends Controller
 {
     public function update(Request $request){
-        $vendor_data = Usermeta::where([['user_id', Auth::id()],['key', 'vendor_data']])->first() ?? new Usermeta();
+       $vendor_data = Usermeta::where([['user_id', Auth::id()],['key', 'vendor_data']])->first() ?? new Usermeta();
 
         //check existing photo
-       $existingPhoto = isset($vendor_data->value) ? (isset(json_decode($vendor_data->value)->nid_photo) ? json_decode($vendor_data->value)->nid_photo : '') : '';
+        $existingPhoto = isset($vendor_data->value) ? (isset(json_decode($vendor_data->value)->nid_photo) ? json_decode($vendor_data->value)->nid_photo : '') : '';
 
         // upload photo 
         $nid_photo = $existingPhoto;
@@ -24,22 +24,22 @@ class VendorController extends Controller
         }
         
         $data = [
-            'shop_name' => $request->shop_name,
-            'shop_address' => $request->shop_address,
-            'shop_city' => $request->shop_city,
-            'shop_state' => $request->shop_state,
-            'shop_country' => $request->shop_country,
-            'shop_pincode' => $request->shop_pincode,
-            'shop_mobile' => $request->shop_mobile,
-            'shop_website' => $request->shop_website,
-            'shop_email' => $request->shop_email,
-            // 'address_proof' => $request->address_proof,
-            // 'address_proof_image' => $request->address_proof_image,
-            'license_number' => $request->license_number,
-            'nid_number' => $request->nid_number,
-            // 'gst_number' => $request->gst_number,
-            // 'pan_number' => $request->pan_number,
+            'shop_name' => $request->shop_name ?? '',
+            'shop_address' => $request->shop_address ?? '',
+            'shop_city' => $request->shop_city ?? '',
+            'shop_state' => $request->shop_state ?? '',
+            'shop_country' => $request->shop_country ?? '',
+            'shop_pincode' => $request->shop_pincode ?? '',
+            'shop_mobile' => $request->shop_mobile ?? '',
+            'shop_website' => $request->shop_website ?? '',
+            'shop_email' => $request->shop_email ?? '',
+            'license_number' => $request->license_number ?? '',
+            'nid_number' => $request->nid_number ?? '',
             'nid_photo' => $nid_photo ?? '',
+            'account_holder_name' => $request->account_holder_name ?? '',
+            'bank_name' => $request->bank_name ?? '',
+            'account_number' => $request->account_number ?? '',
+            'bank_code' => $request->bank_code ?? '',
         ];
         
         $vendor_data->key = 'vendor_data';

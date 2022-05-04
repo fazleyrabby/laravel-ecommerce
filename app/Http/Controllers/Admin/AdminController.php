@@ -26,6 +26,8 @@ class AdminController extends Controller
 
     public function test()
     {
+        $data= json_decode(Usermeta::where('user_id', 2)->first()->value);
+        dd($data);
         // return Role::pluck('name','name')->all();
         // return Auth::user()->hasRole('superadmin'); 
         // dd(Auth::user()->getRoleNames());
@@ -48,7 +50,6 @@ class AdminController extends Controller
         // upload photo 
         $profile_photo = $existingPhoto;
 
-
         if ($request->hasFile('photo')) {
             $profile_photo = imageUpload($request->file('photo'), $existingPhoto);
         }
@@ -59,10 +60,10 @@ class AdminController extends Controller
         ];
 
         //Vendor Specific data
-        if($request->country) $data['country'] = $request->country;
-        if($request->city) $data['city'] = $request->city;
-        if($request->state) $data['state'] = $request->state;
-        if($request->address) $data['address'] = $request->address;
+        $data['country'] = $request->country ?? '';
+        $data['city'] = $request->city ?? '';
+        $data['state'] = $request->state ?? '';
+        $data['address'] = $request->address ?? '';
         
         $meta->key = 'user_data';
         $meta->user_id = $user->id;
