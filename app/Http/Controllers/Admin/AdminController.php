@@ -14,6 +14,18 @@ use Illuminate\Support\Facades\Session;
 
 class AdminController extends Controller
 {
+
+    public function users($type=null){
+        try {
+            $users = User::with('meta','vendor')->role($type)->get();
+        } catch (\Throwable $th) {
+            abort(404);
+        }
+
+        return view('admin.users.index', compact('users', 'type'));
+        
+    }
+
     public function dashboard()
     {
         return view('admin.dashboard');

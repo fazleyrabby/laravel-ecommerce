@@ -43,6 +43,12 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], fu
         Route::post('vendor/update', [VendorController::class, 'update'])->name('vendor.update');
 
         Route::post('password', [AdminController::class, 'updatePassword'])->name('update.password');
+
+        Route::group(['prefix' => 'users'], function(){
+            Route::get('/{type?}', [AdminController::class, 'users'])->name('users');
+        });
+
+        
     });
 });
 

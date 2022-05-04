@@ -1,6 +1,6 @@
 <nav class="sidebar sidebar-offcanvas" id="sidebar">
     <ul class="nav">
-      <li class="nav-item">
+      <li @class(['nav-item', 'active' => request()->is('admin/dashboard')])>
         <a class="nav-link" href="{{ route('admin.dashboard') }}">
           <i class="icon-grid menu-icon"></i>
           <span class="menu-title">Dashboard</span>
@@ -8,13 +8,28 @@
       </li>
 
       @if(Auth::user()->role_id == 2)
-      <li class="nav-item">
+      <li @class(['nav-item', 'active' => request()->is('admin/vendor')])>
         <a class="nav-link" href="{{ route('admin.vendor') }}">
           <i class="icon-grid menu-icon"></i>
           <span class="menu-title">Vendor Business Info.</span>
         </a>
       </li>
       @endif
+
+      <li @class(['nav-item', 'active' => request()->is('admin/users*')])>
+        <a class="nav-link" data-toggle="collapse" href="#ui-basic" aria-expanded="false" aria-controls="ui-basic">
+          <i class="icon-layout menu-icon"></i>
+          <span class="menu-title">User Management</span>
+          <i class="menu-arrow"></i>
+        </a>
+        <div @class(['collapse', 'show' => request()->is('admin/users/*')]) id="ui-basic">
+          <ul class="nav flex-column sub-menu">
+            <li @class(['nav-item', 'active' => request()->is('admin/users/admin')])> <a class="nav-link" href="{{ route('admin.users', ['type'=> 'admin']) }}">Admins</a></li>
+            <li @class(['nav-item', 'active' => request()->is('admin/users/vendor')])> <a class="nav-link" href="{{ route('admin.users', ['type'=> 'vendor']) }}">Vendors</a></li>
+            <li @class(['nav-item', 'active' => request()->is('admin/users/user')])> <a class="nav-link" href="{{ route('admin.users', ['type'=> 'user']) }}">Users</a></li>
+          </ul>
+        </div>
+      </li>
 
       
       {{-- <li class="nav-item">
