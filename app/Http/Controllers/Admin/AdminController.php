@@ -16,6 +16,10 @@ class AdminController extends Controller
 {
 
     public function users($type=null){
+        abort_if($type == '', 404);
+        abort_if(($type == 'admin' && Auth::user()->role_id != 1), 403);
+        abort_if(($type == 'vendor' && Auth::user()->role_id == 3), 403);
+
         try {
             $users = User::with('meta','vendor')->role($type)->get();
         } catch (\Throwable $th) {
@@ -23,7 +27,12 @@ class AdminController extends Controller
         }
 
         return view('admin.users.index', compact('users', 'type'));
-        
+    }
+
+    public function userView(Request $request, User $user){
+        abort_if(($user->type == 'admin' && Auth::user()->role_id != 1), 403);
+        abort_if(($user->type == 'vendor' && Auth::user()->role_id == 3), 403);
+        dd($user);
     }
 
     public function dashboard()

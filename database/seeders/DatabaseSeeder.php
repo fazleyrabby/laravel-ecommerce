@@ -26,7 +26,10 @@ class DatabaseSeeder extends Seeder
             ['name' => 'delete vendor'],
             ['name' => 'create user'],
             ['name' => 'edit user'],
-            ['name' => 'delete user']
+            ['name' => 'delete user'],
+            ['name' => 'create admin'],
+            ['name' => 'edit admin'],
+            ['name' => 'delete admin'],
         ];
 
         $adminRole = Role::create(['name' => 'admin']);

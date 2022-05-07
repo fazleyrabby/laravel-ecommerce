@@ -44,11 +44,10 @@ Route::group(['prefix' => 'admin', 'as' => 'admin.', 'namespace' => 'Admin'], fu
 
         Route::post('password', [AdminController::class, 'updatePassword'])->name('update.password');
 
-        Route::group(['prefix' => 'users'], function(){
-            Route::get('/{type?}', [AdminController::class, 'users'])->name('users');
+        Route::group(['prefix' => 'users', 'as' => 'users.'], function(){
+            Route::get('/{type?}', [AdminController::class, 'users'])->name('index');
+            Route::get('/{user}/view', [AdminController::class, 'userView'])->name('edit');
         });
-
-        
     });
 });
 

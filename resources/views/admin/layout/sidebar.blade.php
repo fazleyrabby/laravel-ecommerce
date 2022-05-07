@@ -24,9 +24,19 @@
         </a>
         <div @class(['collapse', 'show' => request()->is('admin/users/*')]) id="ui-basic">
           <ul class="nav flex-column sub-menu">
-            <li @class(['nav-item', 'active' => request()->is('admin/users/admin')])> <a class="nav-link" href="{{ route('admin.users', ['type'=> 'admin']) }}">Admins</a></li>
-            <li @class(['nav-item', 'active' => request()->is('admin/users/vendor')])> <a class="nav-link" href="{{ route('admin.users', ['type'=> 'vendor']) }}">Vendors</a></li>
-            <li @class(['nav-item', 'active' => request()->is('admin/users/user')])> <a class="nav-link" href="{{ route('admin.users', ['type'=> 'user']) }}">Users</a></li>
+            @can('edit admin')
+            <li @class(['nav-item', 'active' => request()->is('admin/users/admin')])> <a class="nav-link" href="{{ route('admin.users.index', ['type'=> 'admin']) }}">Admins</a></li>
+            @endcan
+
+            @can('edit vendor')
+            <li @class(['nav-item', 'active' => request()->is('admin/users/vendor')])> <a class="nav-link" href="{{ route('admin.users.index', ['type'=> 'vendor']) }}">Vendors</a></li>
+            @endcan
+            
+            
+            @can('edit user')
+            <li @class(['nav-item', 'active' => request()->is('admin/users/user')])> <a class="nav-link" href="{{ route('admin.users.index', ['type'=> 'user']) }}">Users</a></li>
+            @endcan
+
           </ul>
         </div>
       </li>
